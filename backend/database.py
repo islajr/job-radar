@@ -15,9 +15,10 @@ SessionLocal = async_sessionmaker(engine, expire_on_commit=False)
 class Base(DeclarativeBase):
     pass
 
+from sqlalchemy import text
 async def init_db():
     async with engine.begin() as conn:
-        await conn.run_sync(lambda c: c.execute("SELECT 1"))  # connection check only
+        await conn.run_sync(lambda c: c.execute(text("SELECT 1")))  # connection check only
 
 async def get_db() -> AsyncSession:
     async with SessionLocal() as session:
