@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getProfile, updateProfile, getNotifications, updateNotifications } from "../api/profile";
+import { useAuth } from "../contexts/AuthContext";
+import { getProfile, updateProfile, getNotifications, updateNotifications, sendTestEmail } from "../api/profile";
 import KeywordInput from "../components/KeywordInput";
-import TelegramConnect from "../components/TelegramConnect";
 import styles from "./Settings.module.css";
 
 export default function Settings() {
-
+  const { user } = useAuth();
 
   // Role and experience state
   const [roleTitle, setRoleTitle] = useState("");
@@ -24,7 +24,24 @@ export default function Settings() {
   const [frequency, setFrequency] = useState("immediate");
   const [notifLoading, setNotifLoading] = useState(false);
   const [notifMsg, setNotifMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
-  const [telegramConnected, setTelegramConnected] = useState(false);
+
+  const [testSending, setTestSending] = useState(false);
+  const [testSent, setTestSent] = useState(false);
+  const [testError, setTestError] = useState<string | null>(null);
+
+  const handleSendTest = async () => {
+    setTestSending(true);
+    setTestSent(false);
+    setTestError(null);
+    try {
+      await sendTestEmail();
+      setTestSent(true);
+    } catch (err: any) {
+      setTestError(err?.detail || "Failed to send test email.");
+    } finally {
+      setTestSending(false);
+    }
+  };
 
   const [pageLoading, setPageLoading] = useState(true);
 
@@ -40,7 +57,6 @@ export default function Settings() {
 
         const notif = await getNotifications();
         setFrequency(notif.frequency || "immediate");
-        setTelegramConnected(notif.telegram_connected || false);
       } catch (e) {
         // ignore
       } finally {
@@ -242,14 +258,32 @@ export default function Settings() {
 
         <div style={{ marginTop: "1rem", borderTop: "1px solid var(--border-color)", paddingTop: "1.5rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
-            <label className={styles.label} style={{ marginBottom: 0 }}>Telegram Bot Connection</label>
-            {telegramConnected ? (
-              <span style={{ fontSize: "0.85rem", color: "#10b981", backgroundColor: "rgba(16, 185, 129, 0.15)", padding: "0.25rem 0.6rem", borderRadius: "100px", border: "1px solid rgba(16, 185, 129, 0.3)", fontWeight: 500 }}>Connected</span>
-            ) : (
-              <span style={{ fontSize: "0.85rem", color: "#f59e0b", backgroundColor: "rgba(245, 158, 11, 0.15)", padding: "0.25rem 0.6rem", borderRadius: "100px", border: "1px solid rgba(245, 158, 11, 0.3)", fontWeight: 500 }}>Not Connected</span>
+            <label className={styles.label} style={{ marginBottom: 0 }}>Email Alerts Verification</label>
+            <span style={{ fontSize: "0.85rem", color: "#10b981", backgroundColor: "rgba(16, 185, 129, 0.15)", padding: "0.25rem 0.6rem", borderRadius: "100px", border: "1px solid rgba(16, 185, 129, 0.3)", fontWeight: 500 }}>
+              {user?.email}
+            </span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <button
+              type="button"
+              onClick={handleSendTest}
+              disabled={testSending}
+              className="btn-glow"
+              style={{ background: "var(--bg-secondary)", color: "var(--text-primary)", border: "1px solid var(--border-color)", boxShadow: "none" }}
+            >
+              {testSending ? "Sending test email..." : "✉️ Send Test Email"}
+            </button>
+            {testSent && (
+              <div style={{ color: "var(--success)", fontSize: "0.85rem", textAlign: "center", fontWeight: 500 }}>
+                ✓ Test email sent! Check your inbox.
+              </div>
+            )}
+            {testError && (
+              <div style={{ color: "var(--error)", fontSize: "0.85rem", textAlign: "center", fontWeight: 500 }}>
+                ⚠ {testError}
+              </div>
             )}
           </div>
-          <TelegramConnect onConnected={() => setTelegramConnected(true)} />
         </div>
       </section>
     </div>

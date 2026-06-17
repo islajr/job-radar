@@ -29,3 +29,12 @@ export async function updateNotifications(body: Record<string, any>) {
   if (!res.ok) throw await res.json();
   return res.json();
 }
+
+export async function sendTestEmail() {
+  const res = await fetch("/api/profile/test-email", {
+    method: "POST",
+  });
+  if (!res.ok) throw await res.json();
+  return res.json();
+}
+

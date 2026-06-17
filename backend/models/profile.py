@@ -26,7 +26,7 @@ class NotificationSettings(Base):
 
     id                 = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id            = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), unique=True)
-    channels           = Column(ARRAY(String), nullable=False, default=lambda: ["telegram"])
+    channels           = Column(ARRAY(String), nullable=False, default=lambda: ["email"])
     frequency          = Column(String, nullable=False, default="immediate")
     telegram_chat_id   = Column(String)
     telegram_connected = Column(Boolean, nullable=False, default=False)

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { updateProfile, updateNotifications } from "../api/profile";
+import { updateProfile, updateNotifications, sendTestEmail } from "../api/profile";
 import KeywordInput from "../components/KeywordInput";
-import TelegramConnect from "../components/TelegramConnect";
 import styles from "./Onboarding.module.css";
+
 
 type Step = 1 | 2 | 3;
 
@@ -19,9 +19,12 @@ export default function Onboarding() {
   const [exclusionKeywords, setExclusionKeywords] = useState<string[]>([]);
   const [skillsSummary, setSkillsSummary] = useState("");
   const [frequency, setFrequency] = useState("immediate");
-  const [telegramConnected, setTelegramConnected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [testSending, setTestSending] = useState(false);
+  const [testSent, setTestSent] = useState(false);
+  const [testError, setTestError] = useState<string | null>(null);
 
   // If not logged in, redirect to login
   if (!user) {
@@ -32,6 +35,20 @@ export default function Onboarding() {
   if (user.onboarding_complete) {
     return <Navigate to="/dashboard" replace />;
   }
+
+  const handleSendTest = async () => {
+    setTestSending(true);
+    setTestSent(false);
+    setTestError(null);
+    try {
+      await sendTestEmail();
+      setTestSent(true);
+    } catch (err: any) {
+      setTestError(err?.detail || "Failed to send test email.");
+    } finally {
+      setTestSending(false);
+    }
+  };
 
   const handleFinish = async () => {
     setLoading(true);
@@ -46,9 +63,9 @@ export default function Onboarding() {
         skills_summary: skillsSummary,
       });
 
-      // Step 2: Update notification settings (channel default to telegram)
+      // Step 2: Update notification settings (channel default to email)
       await updateNotifications({
-        channels: ["telegram"],
+        channels: ["email"],
         frequency: frequency,
       });
 
@@ -199,10 +216,33 @@ export default function Onboarding() {
               </div>
 
               <div className={styles.infoNote}>
-                ℹ️ Alerts are delivered exclusively via Telegram. Setup the Telegram Bot below.
+                ℹ️ Alerts will be delivered directly to your registered email address:
+                <div style={{ fontWeight: 600, marginTop: "0.25rem", color: "var(--text-primary)" }}>
+                  {user?.email}
+                </div>
               </div>
 
-              <TelegramConnect onConnected={() => setTelegramConnected(true)} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", marginTop: "0.5rem" }}>
+                <button
+                  type="button"
+                  onClick={handleSendTest}
+                  disabled={testSending}
+                  className="btn-glow"
+                  style={{ background: "var(--bg-secondary)", color: "var(--text-primary)", border: "1px solid var(--border-color)", boxShadow: "none" }}
+                >
+                  {testSending ? "Sending test email..." : "✉️ Send Test Email"}
+                </button>
+                {testSent && (
+                  <div style={{ color: "var(--success)", fontSize: "0.85rem", textAlign: "center", fontWeight: 500 }}>
+                    ✓ Test email sent! Check your inbox.
+                  </div>
+                )}
+                {testError && (
+                  <div style={{ color: "var(--error)", fontSize: "0.85rem", textAlign: "center", fontWeight: 500 }}>
+                    ⚠ {testError}
+                  </div>
+                )}
+              </div>
             </>
           )}
 
@@ -228,7 +268,7 @@ export default function Onboarding() {
                 className="btn-glow"
                 style={{ flex: 1 }}
                 type="button"
-                disabled={!telegramConnected || loading}
+                disabled={loading}
                 onClick={handleFinish}
               >
                 {loading ? "Completing setup..." : "Finish Onboarding"}

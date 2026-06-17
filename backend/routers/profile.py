@@ -54,3 +54,40 @@ async def update_notifications(body: NotificationSettingsUpdate, user: User = De
     await db.commit()
     await db.refresh(ns)
     return ns
+
+import httpx
+from backend.config import settings
+
+async def send_test_email(to_email: str) -> None:
+    if not settings.resend_api_key or settings.resend_api_key == "re_fake_api_key":
+        return
+    headers = {
+        "Authorization": f"Bearer {settings.resend_api_key}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "from": f"Job Radar <{settings.resend_from_email}>",
+        "to": [to_email],
+        "subject": "Job Radar - Resend Integration Test Email",
+        "html": f"""
+        <html>
+            <body style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; color: #1d1d1f;">
+                <h2 style="color: #0071e3;">🔎 Resend Integration Working!</h2>
+                <p>Hello! This email confirms that your Job Radar account is successfully linked to receive remote job alerts via Resend.</p>
+                <p>Enjoy your job hunt!</p>
+            </body>
+        </html>
+        """
+    }
+    async with httpx.AsyncClient(timeout=10) as client:
+        response = await client.post("https://api.resend.com/emails", headers=headers, json=payload)
+        response.raise_for_status()
+
+@router.post("/profile/test-email")
+async def trigger_test_email(user: User = Depends(get_current_user)):
+    try:
+        await send_test_email(user.email)
+        return {"ok": True}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+

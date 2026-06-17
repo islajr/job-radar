@@ -3,7 +3,8 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     database_url: str                         # Supabase connection string
     secret_key: str                           # Session signing; generate with secrets.token_hex(32)
-    telegram_bot_token: str
+    resend_api_key: str
+    resend_from_email: str = "onboarding@resend.dev"
     github_dispatch_token: str                # Fine-grained PAT with workflow scope
     github_repo: str                          # e.g. "username/job-radar"
     environment: str = "production"

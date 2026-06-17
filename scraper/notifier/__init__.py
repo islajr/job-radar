@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from scraper.notifier.telegram import send_telegram_message, format_listing_telegram
+from scraper.notifier.resend_notifier import send_email_message, format_listing_email
 
 log = logging.getLogger(__name__)
 
@@ -8,10 +8,11 @@ async def _send_one(match: dict) -> None:
     tasks = []
     listing = match["listing"]
 
-    if "telegram" in match["channels"] and match.get("telegram_chat_id"):
-        tasks.append(send_telegram_message(
-            chat_id=match["telegram_chat_id"],
-            text=format_listing_telegram(listing)
+    if "email" in match["channels"] and match.get("email"):
+        tasks.append(send_email_message(
+            to_email=match["email"],
+            subject=f"Job Match: {listing.get('title', 'New Remote Role')}",
+            html_content=format_listing_email(listing)
         ))
 
     if tasks:
@@ -30,3 +31,4 @@ async def dispatch_immediate_notifications(db, matches: list[dict]) -> None:
                 (m["user_id"], m["listing_id"])
             )
         db.commit()
+

@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from backend.database import init_db
-from backend.routers import auth, profile, dashboard, telegram, admin
+from backend.routers import auth, profile, dashboard, admin
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -15,7 +15,6 @@ app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None)
 app.include_router(auth.router,      prefix="/api/auth")
 app.include_router(profile.router,   prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
-app.include_router(telegram.router,  prefix="/api/telegram")
 app.include_router(admin.router,     prefix="/api/admin")
 
 # Ensure frontend/dist exists to avoid FastAPI StaticFiles startup crash

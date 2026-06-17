@@ -2,7 +2,8 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     database_url: str                         # Supabase connection string
-    telegram_bot_token: str
+    resend_api_key: str
+    resend_from_email: str = "onboarding@resend.dev"
     environment: str = "production"
 
     class Config:

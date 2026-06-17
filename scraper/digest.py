@@ -2,9 +2,98 @@ import asyncio
 import logging
 from collections import defaultdict
 from scraper.database import get_connection
-from scraper.notifier.telegram import send_telegram_message
+from scraper.notifier.resend_notifier import send_email_message
 
 log = logging.getLogger(__name__)
+
+def format_digest_email(listings: list[dict]) -> str:
+    items_html = ""
+    for i, l in enumerate(listings, 1):
+        salary = f" &bull; 💰 {l['salary_text']}" if l.get("salary_text") else ""
+        company = l.get("company") or "Unknown company"
+        location = l.get("location") or "Remote"
+        board = l.get("board", "").capitalize()
+        
+        items_html += f"""
+        <div style="border-bottom: 1px solid #e5e5ea; padding: 16px 0; margin-bottom: 8px;">
+            <div style="font-size: 16px; font-weight: 600; color: #1d1d1f; margin-bottom: 4px;">
+                {i}. {l['title']}
+            </div>
+            <div style="font-size: 14px; color: #6e6e73; margin-bottom: 8px;">
+                🏢 <b>{company}</b> &bull; 📍 {location} &bull; via {board}{salary}
+            </div>
+            <a href="{l['url']}" target="_blank" style="font-size: 14px; color: #0071e3; text-decoration: none; font-weight: 500;">
+                View Job Listing &rarr;
+            </a>
+        </div>
+        """
+        
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                background-color: #f5f5f7;
+                margin: 0;
+                padding: 24px;
+            }}
+            .container {{
+                max-width: 560px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border: 1px solid #e5e5ea;
+                border-radius: 12px;
+                padding: 28px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            }}
+            .header {{
+                font-size: 14px;
+                font-weight: 700;
+                color: #0071e3;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }}
+            .digest-title {{
+                font-size: 22px;
+                font-weight: 700;
+                color: #1d1d1f;
+                margin: 0 0 8px 0;
+                line-height: 1.25;
+            }}
+            .digest-subtitle {{
+                font-size: 14px;
+                color: #6e6e73;
+                margin-bottom: 24px;
+                border-bottom: 2px solid #e5e5ea;
+                padding-bottom: 12px;
+            }}
+            .footer {{
+                margin-top: 24px;
+                font-size: 12px;
+                color: #86868b;
+                text-align: center;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">🔎 Job Radar Digest</div>
+            <h1 class="digest-title">Your Daily Remote Job Digest</h1>
+            <div class="digest-subtitle">We found {len(listings)} new match(es) for your profile today.</div>
+            <div>
+                {items_html}
+            </div>
+            <div class="footer">
+                You are receiving this because email alerts are enabled for your Job Radar account.
+            </div>
+        </div>
+    </body>
+    </html>
+    """
 
 async def send_digest():
     db = get_connection()
@@ -56,16 +145,14 @@ async def send_digest():
         for user_id, listings in by_user.items():
             first = listings[0]
             channels = first["channels"] or []
-            telegram_chat_id = first["telegram_chat_id"] if first["telegram_connected"] else None
+            user_email = first["email"]
 
             match_ids_to_mark.extend([l["match_id"] for l in listings])
 
-            if "telegram" in channels and telegram_chat_id:
-                text = f"📋 <b>Your daily job digest — {len(listings)} new match(es)</b>\n\n"
-                for i, l in enumerate(listings, 1):
-                    salary = f" · {l['salary_text']}" if l.get("salary_text") else ""
-                    text += f"{i}. <b>{l['title']}</b> at {l.get('company','?')}{salary}\n<a href=\"{l['url']}\">View →</a>\n\n"
-                tasks.append(send_telegram_message(telegram_chat_id, text))
+            if "email" in channels and user_email:
+                subject = f"Job Radar: Daily Digest ({len(listings)} new matches)"
+                html = format_digest_email(listings)
+                tasks.append(send_email_message(user_email, subject, html))
 
         if tasks:
             await asyncio.gather(*tasks, return_exceptions=True)
@@ -80,3 +167,4 @@ async def send_digest():
 
 if __name__ == "__main__":
     asyncio.run(send_digest())
+
