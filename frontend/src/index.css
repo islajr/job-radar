@@ -1,31 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Outfit', sans-serif;
-
-  /* Theme colors - premium glowing dark mode */
-  --bg-color: #030712;
-  --card-bg-raw: 17, 24, 39;
-  --card-bg: rgba(var(--card-bg-raw), 0.7);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-color-glow: rgba(99, 102, 241, 0.2);
-
-  --primary: #6366f1;
-  --primary-glow: rgba(99, 102, 241, 0.15);
-  --primary-hover: #4f46e5;
-  --secondary: #ec4899;
-  --secondary-glow: rgba(236, 72, 153, 0.15);
+  /* Default Theme (Dark Mode) - Dark neutral Apple style */
+  --bg-color: #000000;
+  --bg-secondary: #161617;
+  --card-bg: #1d1d1f;
+  --border-color: #333336;
+  --primary: #2997ff;
+  --primary-hover: #147ce5;
+  --primary-glow: rgba(41, 151, 255, 0.15);
   
-  --text-primary: #f3f4f6;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --text-primary: #f5f5f7;
+  --text-secondary: #86868b;
+  --text-muted: #6e6e73;
 
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
+  --success: #30d158;
+  --error: #ff453a;
+  --warning: #ff9f0a;
 
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --transition-smooth: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+[data-theme="light"] {
+  /* Light Theme - Light clean Apple style */
+  --bg-color: #ffffff;
+  --bg-secondary: #f5f5f7;
+  --card-bg: #ffffff;
+  --border-color: #d2d2d7;
+  --primary: #0071e3;
+  --primary-hover: #0077ed;
+  --primary-glow: rgba(0, 113, 227, 0.15);
+
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #86868b;
+
+  --success: #34c759;
+  --error: #ff3b30;
+  --warning: #ff9500;
 }
 
 * {
@@ -35,21 +49,19 @@
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: var(--bg-secondary);
   color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100vh;
   overflow-x: hidden;
-  background-image: 
-    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.06) 0%, transparent 45%);
-  background-attachment: fixed;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
 }
 
 a {
@@ -59,46 +71,55 @@ a {
 }
 
 a:hover {
-  color: var(--secondary);
+  color: var(--primary-hover);
 }
 
 button, input, select, textarea {
   font-family: inherit;
 }
 
-/* Glassmorphism utility card */
+/* Minimalist Card styling (Apple spec) */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
   transition: var(--transition-smooth);
 }
 
-/* Glow button styling */
+/* Rounded, solid action buttons (Apple control style) */
 .btn-glow {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  background: var(--primary);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
-  padding: 12px 24px;
-  font-weight: 600;
+  border-radius: 20px; /* Highly rounded system controls */
+  padding: 10px 20px;
+  font-weight: 500;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: var(--transition-smooth);
-  box-shadow: 0 4px 14px 0 var(--primary-glow);
+  box-shadow: 0 2px 8px var(--primary-glow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-glow:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.4);
+  background: var(--primary-hover);
+  box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 .btn-glow:active {
-  transform: translateY(0);
+  transform: scale(0.98);
+}
+
+.btn-glow:disabled {
+  background: var(--border-color);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 /* Custom Scrollbar */
@@ -108,14 +129,14 @@ button, input, select, textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-color);
+  background: var(--bg-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border-color);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--text-muted);
 }

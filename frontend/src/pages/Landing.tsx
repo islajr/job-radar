@@ -1,5 +1,6 @@
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Landing.module.css";
 
 export default function Landing() {
@@ -12,6 +13,10 @@ export default function Landing() {
 
   return (
     <div className={styles.container}>
+      <nav className={styles.navbar}>
+        <span className={styles.logo}>🔎 Job Radar</span>
+        <ThemeToggle />
+      </nav>
       <header className={styles.hero}>
         <div className={styles.badge}>Stage 1 Core Active</div>
         <h1 className={styles.title}>Your Personal Remote Job Radar</h1>

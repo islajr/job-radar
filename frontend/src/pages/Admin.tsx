@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAdminUsers, getScraperRuns, triggerScraper, type AdminUser, type ScraperRun } from "../api/admin";
+import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Admin.module.css";
 
 export default function Admin() {
@@ -62,7 +63,7 @@ export default function Admin() {
   if (loading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <div style={{ border: "4px solid rgba(255,255,255,0.1)", borderLeftColor: "#6366f1", borderRadius: "50%", width: "40px", height: "40px", animation: "spin 1s linear infinite" }}></div>
+        <div style={{ border: "4px solid rgba(255,255,255,0.1)", borderLeftColor: "var(--primary)", borderRadius: "50%", width: "40px", height: "40px", animation: "spin 1s linear infinite" }}></div>
       </div>
     );
   }
@@ -74,9 +75,12 @@ export default function Admin() {
           <h1 className={styles.title}>Admin Panel</h1>
           <p style={{ color: "var(--text-secondary)" }}>Monitor scraper health and user status</p>
         </div>
-        <button className={styles.btnBack} onClick={() => navigate("/dashboard")}>
-          Back to Dashboard
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <ThemeToggle />
+          <button className={styles.btnBack} onClick={() => navigate("/dashboard")}>
+            Back to Dashboard
+          </button>
+        </div>
       </header>
 
       {/* Scraper manual trigger section */}

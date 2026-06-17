@@ -13,42 +13,16 @@ export default function MatchCard({ match }: MatchCardProps) {
     minute: "2-digit",
   });
 
-  const getBoardColor = (board: string) => {
+  const getBoardClass = (board: string) => {
     switch (board.toLowerCase()) {
       case "remoteok":
-        return "rgba(255, 71, 87, 0.15)";
+        return styles.remoteok;
       case "himalayas":
-        return "rgba(99, 102, 241, 0.15)";
+        return styles.himalayas;
       case "ycombinator":
-        return "rgba(255, 102, 0, 0.15)";
+        return styles.ycombinator;
       default:
-        return "rgba(255, 255, 255, 0.05)";
-    }
-  };
-
-  const getBoardBorder = (board: string) => {
-    switch (board.toLowerCase()) {
-      case "remoteok":
-        return "rgba(255, 71, 87, 0.3)";
-      case "himalayas":
-        return "rgba(99, 102, 241, 0.3)";
-      case "ycombinator":
-        return "rgba(255, 102, 0, 0.3)";
-      default:
-        return "rgba(255, 255, 255, 0.1)";
-    }
-  };
-
-  const getBoardTextColor = (board: string) => {
-    switch (board.toLowerCase()) {
-      case "remoteok":
-        return "#ff4757";
-      case "himalayas":
-        return "#6366f1";
-      case "ycombinator":
-        return "#ff6600";
-      default:
-        return "var(--text-secondary)";
+        return "";
     }
   };
 
@@ -57,14 +31,7 @@ export default function MatchCard({ match }: MatchCardProps) {
       <div className={styles.left}>
         <div className={styles.headerRow}>
           <h3 className={styles.title}>{match.title}</h3>
-          <span
-            className={styles.boardBadge}
-            style={{
-              backgroundColor: getBoardColor(match.board),
-              borderColor: getBoardBorder(match.board),
-              color: getBoardTextColor(match.board),
-            }}
-          >
+          <span className={`${styles.boardBadge} ${getBoardClass(match.board)}`}>
             {match.board}
           </span>
         </div>

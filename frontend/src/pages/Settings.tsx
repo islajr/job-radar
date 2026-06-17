@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getProfile, updateProfile, getNotifications, updateNotifications } from "../api/profile";
 import KeywordInput from "../components/KeywordInput";
 import TelegramConnect from "../components/TelegramConnect";
+import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Settings.module.css";
 
 export default function Settings() {
@@ -105,7 +106,7 @@ export default function Settings() {
   if (pageLoading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <div style={{ border: "4px solid rgba(255,255,255,0.1)", borderLeftColor: "#6366f1", borderRadius: "50%", width: "40px", height: "40px", animation: "spin 1s linear infinite" }}></div>
+        <div style={{ border: "4px solid rgba(255,255,255,0.1)", borderLeftColor: "var(--primary)", borderRadius: "50%", width: "40px", height: "40px", animation: "spin 1s linear infinite" }}></div>
       </div>
     );
   }
@@ -117,9 +118,12 @@ export default function Settings() {
           <h1 className={styles.title}>Settings</h1>
           <p style={{ color: "var(--text-secondary)" }}>Adjust your match filters and alerts</p>
         </div>
-        <button className={styles.btnBack} onClick={() => navigate("/dashboard")}>
-          Back to Dashboard
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <ThemeToggle />
+          <button className={styles.btnBack} onClick={() => navigate("/dashboard")}>
+            Back to Dashboard
+          </button>
+        </div>
       </header>
 
       {/* Section 1: Role & Experience */}

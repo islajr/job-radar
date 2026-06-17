@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { updateProfile, updateNotifications } from "../api/profile";
 import KeywordInput from "../components/KeywordInput";
 import TelegramConnect from "../components/TelegramConnect";
+import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Onboarding.module.css";
 
 type Step = 1 | 2 | 3;
@@ -71,6 +72,9 @@ export default function Onboarding() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.themeHeader}>
+        <ThemeToggle />
+      </div>
       <div className={`${styles.card} glass-card`}>
         <div className={styles.progress}>
           <div className={styles.progressLine}></div>

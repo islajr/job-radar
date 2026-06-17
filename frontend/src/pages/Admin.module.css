@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  background-color: var(--bg-secondary);
 }
 
 .header {
@@ -22,8 +23,10 @@
 }
 
 .title {
-  font-size: 2rem;
-  color: #ffffff;
+  font-size: 1.85rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
 .btnBack {
@@ -31,14 +34,15 @@
   color: var(--text-secondary);
   border: 1px solid var(--border-color);
   padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-weight: 600;
+  border-radius: 20px;
+  font-weight: 500;
   cursor: pointer;
   transition: var(--transition-smooth);
+  font-size: 0.9rem;
 }
 
 .btnBack:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
   color: var(--text-primary);
 }
 
@@ -48,8 +52,8 @@
   justify-content: space-between;
   padding: 1.5rem;
   border-radius: 12px;
-  background: rgba(99, 102, 241, 0.05);
-  border: 1px solid rgba(99, 102, 241, 0.15);
+  background: var(--primary-glow);
+  border: 1px solid var(--border-color);
 }
 
 .triggerText {
@@ -60,7 +64,7 @@
 
 .triggerTitle {
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .triggerDesc {
@@ -79,11 +83,12 @@
 }
 
 .sectionHeader {
-  font-size: 1.25rem;
-  color: #ffffff;
+  font-size: 1.2rem;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
   padding-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 /* Custom Table Layout */
@@ -113,32 +118,32 @@
 }
 
 .table tr:hover {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-secondary);
 }
 
 .badge {
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 100px; /* Highly rounded badges */
 }
 
 .badgeSuccess {
-  background: rgba(16, 185, 129, 0.15);
+  background: rgba(48, 209, 88, 0.15);
   color: var(--success);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border: 1px solid rgba(48, 209, 88, 0.3);
 }
 
 .badgeError {
-  background: rgba(239, 68, 68, 0.15);
+  background: rgba(255, 69, 58, 0.15);
   color: var(--error);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(255, 69, 58, 0.3);
 }
 
 .badgeWarning {
-  background: rgba(245, 158, 11, 0.15);
+  background: rgba(255, 159, 10, 0.15);
   color: var(--warning);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(255, 159, 10, 0.3);
 }
 
 .errorText {

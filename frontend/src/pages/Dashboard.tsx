@@ -6,6 +6,7 @@ import { getMatches, type Match } from "../api/matches";
 import MatchCard from "../components/MatchCard";
 import AlertToggle from "../components/AlertToggle";
 import BoardStatus from "../components/BoardStatus";
+import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
@@ -54,6 +55,7 @@ export default function Dashboard() {
           <p style={{ color: "var(--text-secondary)" }}>Manage your remoteness match radar</p>
         </div>
         <div className={styles.nav}>
+          <ThemeToggle />
           {user?.is_admin && (
             <Link to="/admin" className={styles.navLink}>
               🔑 Admin Panel

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { loginUser } from "../api/auth";
+import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Auth.module.css";
 
 export default function Login() {
@@ -39,6 +40,9 @@ export default function Login() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.themeHeader}>
+        <ThemeToggle />
+      </div>
       <div className={`${styles.card} glass-card`}>
         <div className={styles.header}>
           <h2 className={styles.title}>Welcome Back</h2>
