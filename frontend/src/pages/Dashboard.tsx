@@ -55,7 +55,7 @@ export default function Dashboard() {
               <span className={styles.emptyIcon}>🛰️</span>
               <h3>No matched listings found yet</h3>
               <p style={{ maxWidth: "340px" }}>
-                Make sure your Telegram bot is linked and check back after the next scheduled scraper run!
+                Make sure your email alerts are enabled and check back after the next scheduled scraper run!
               </p>
             </div>
           ) : (

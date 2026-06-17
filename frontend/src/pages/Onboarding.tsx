@@ -122,7 +122,7 @@ export default function Onboarding() {
         {step === 3 && (
           <div className={styles.header}>
             <h2 className={styles.title}>Configure Alerts</h2>
-            <p className={styles.subtitle}>Link your Telegram bot to receive matches</p>
+            <p className={styles.subtitle}>Set up email notifications to receive matches</p>
           </div>
         )}
 

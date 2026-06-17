@@ -151,7 +151,6 @@ export default function Admin() {
                   <th>Email</th>
                   <th>Registered At</th>
                   <th>Alerts</th>
-                  <th>Telegram Connected</th>
                 </tr>
               </thead>
               <tbody>
@@ -161,13 +160,6 @@ export default function Admin() {
                     <td>{user.email}</td>
                     <td>{new Date(user.created_at).toLocaleDateString()}</td>
                     <td>{user.alerts_paused ? "⏸️ Paused" : "🔔 Active"}</td>
-                    <td>
-                      {user.telegram_connected ? (
-                        <span className={`${styles.badge} ${styles.badgeSuccess}`}>Connected</span>
-                      ) : (
-                        <span className={`${styles.badge} ${styles.badgeError}`}>Disconnected</span>
-                      )}
-                    </td>
                   </tr>
                 ))}
               </tbody>

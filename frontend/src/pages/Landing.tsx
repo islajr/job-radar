@@ -11,7 +11,7 @@ export default function Landing() {
         <div className={styles.badge}>Stage 1 Core Active</div>
         <h1 className={styles.title}>Your Personal Remote Job Radar</h1>
         <p className={styles.description}>
-          Stop manually scanning job boards. Set your keywords, connect your Telegram bot, and get personalized remote opportunities delivered instantly to your phone.
+          Stop manually scanning job boards. Set your keywords, and get personalized remote opportunities delivered instantly to your email inbox.
         </p>
         <div className={styles.ctaGroup}>
           {user ? (
@@ -36,10 +36,10 @@ export default function Landing() {
 
       <section className={styles.features}>
         <div className={styles.featureCard}>
-          <div className={styles.featureIcon}>🤖</div>
-          <h3 className={styles.featureTitle}>Telegram Alerts</h3>
+          <div className={styles.featureIcon}>📬</div>
+          <h3 className={styles.featureTitle}>Email Alerts</h3>
           <p className={styles.featureDesc}>
-            Instant notifications directly in Telegram as soon as matching remote job listings are detected.
+            Instant email notifications via Resend as soon as matching remote job listings are detected.
           </p>
         </div>
         <div className={styles.featureCard}>
