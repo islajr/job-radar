@@ -1,0 +1,102 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.title {
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 320px;
+  text-align: left;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.step {
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.stepNum {
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.btnTelegram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #229ED9; /* Telegram blue */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 14px 0 rgba(34, 158, 217, 0.3);
+  width: 100%;
+  max-width: 280px;
+}
+
+.btnTelegram:hover {
+  background: #1e8fc5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(34, 158, 217, 0.5);
+}
+
+.statusText {
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: pulse 1.5s infinite;
+}
+
+.statusConnected {
+  color: var(--success);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusTimeout {
+  color: var(--error);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.spinner {
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-left-color: var(--primary);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

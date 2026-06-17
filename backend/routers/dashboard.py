@@ -4,9 +4,9 @@ from sqlalchemy import select, update
 from backend.database import get_db
 from backend.models.user import User
 from backend.models.profile import UserProfile
-from backend.models.match import UserMatch
+from backend.models.match import UserMatch, ScraperRun
 from backend.models.listing import Listing
-from backend.schemas.listing import MatchOut
+from backend.schemas.listing import MatchOut, BoardStatusOut
 from backend.dependencies import get_current_user
 from pydantic import BaseModel
 
@@ -61,3 +61,13 @@ async def pause_alerts(body: AlertPauseUpdate, user: User = Depends(get_current_
     await db.execute(stmt)
     await db.commit()
     return {"ok": True, "paused": body.paused}
+
+@router.get("/scraper-status", response_model=list[BoardStatusOut])
+async def get_scraper_status(user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    stmt = (
+        select(ScraperRun)
+        .distinct(ScraperRun.board)
+        .order_by(ScraperRun.board, ScraperRun.started_at.desc())
+    )
+    result = await db.execute(stmt)
+    return result.scalars().all()

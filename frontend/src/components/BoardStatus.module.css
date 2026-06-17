@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  width: 100%;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.boardName {
+  font-weight: 500;
+  text-transform: capitalize;
+  color: var(--text-primary);
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.success {
+  background-color: var(--success);
+  box-shadow: 0 0 8px var(--success);
+}
+
+.failed {
+  background-color: var(--error);
+  box-shadow: 0 0 8px var(--error);
+}
+
+.running {
+  background-color: var(--warning);
+  box-shadow: 0 0 8px var(--warning);
+  animation: pulse 1s infinite;
+}
+
+.time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}

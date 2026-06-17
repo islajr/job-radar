@@ -15,3 +15,12 @@ class MatchOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class BoardStatusOut(BaseModel):
+    board: str
+    started_at: datetime
+    completed_at: Optional[datetime] = None
+    status: str
+
+    class Config:
+        from_attributes = True

@@ -1,15 +1,20 @@
-from passlib.context import CryptContext
+import bcrypt
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from backend.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 _serializer = URLSafeTimedSerializer(settings.secret_key)
 
 def hash_password(plain: str) -> str:
-    return pwd_context.hash(plain)
+    pwd_bytes = plain.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(pwd_bytes, salt)
+    return hashed.decode('utf-8')
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    try:
+        return bcrypt.checkpw(plain.encode('utf-8'), hashed.encode('utf-8'))
+    except Exception:
+        return False
 
 def create_session_token(user_id: str) -> str:
     return _serializer.dumps(user_id, salt="session")
