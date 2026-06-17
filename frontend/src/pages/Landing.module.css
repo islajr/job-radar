@@ -19,6 +19,30 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btnLogout {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btnLogout:hover {
+  background: var(--border-color);
+  color: var(--error);
+}
+
+
 .logo {
   font-family: var(--font-display);
   font-size: 1.25rem;

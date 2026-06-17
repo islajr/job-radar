@@ -12,9 +12,28 @@
   width: 100%;
   max-width: 560px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
 }
+
+.btnSignout {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btnSignout:hover {
+  background: var(--border-color);
+  color: var(--error);
+}
+
 
 .card {
   width: 100%;

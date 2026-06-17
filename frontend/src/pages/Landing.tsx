@@ -1,21 +1,33 @@
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { logoutUser } from "../api/auth";
 import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Landing.module.css";
 
 export default function Landing() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
 
-  // If user is already logged in, redirect them to dashboard
-  if (user) {
-    return <Navigate to="/dashboard" replace />;
-  }
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      setUser(null);
+    } catch (e) {
+      // ignore
+    }
+  };
 
   return (
     <div className={styles.container}>
       <nav className={styles.navbar}>
         <span className={styles.logo}>🔎 Job Radar</span>
-        <ThemeToggle />
+        <div className={styles.navRight}>
+          <ThemeToggle />
+          {user && (
+            <button onClick={handleLogout} className={styles.btnLogout}>
+              Sign Out
+            </button>
+          )}
+        </div>
       </nav>
       <header className={styles.hero}>
         <div className={styles.badge}>Stage 1 Core Active</div>
@@ -24,12 +36,23 @@ export default function Landing() {
           Stop manually scanning job boards. Set your keywords, connect your Telegram bot, and get personalized remote opportunities delivered instantly to your phone.
         </p>
         <div className={styles.ctaGroup}>
-          <Link to="/register" className="btn-glow">
-            Get Started
-          </Link>
-          <Link to="/login" className={styles.btnSecondary}>
-            Sign In
-          </Link>
+          {user ? (
+            <Link
+              to={user.onboarding_complete ? "/dashboard" : "/onboarding"}
+              className="btn-glow"
+            >
+              {user.onboarding_complete ? "Go to Dashboard" : "Continue Onboarding"}
+            </Link>
+          ) : (
+            <>
+              <Link to="/register" className="btn-glow">
+                Get Started
+              </Link>
+              <Link to="/login" className={styles.btnSecondary}>
+                Sign In
+              </Link>
+            </>
+          )}
         </div>
       </header>
 
