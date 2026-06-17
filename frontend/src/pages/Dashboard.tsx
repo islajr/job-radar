@@ -1,17 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { logoutUser } from "../api/auth";
 import { getMatches, type Match } from "../api/matches";
 import MatchCard from "../components/MatchCard";
 import AlertToggle from "../components/AlertToggle";
 import BoardStatus from "../components/BoardStatus";
-import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
-  const { user, setUser } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,16 +27,6 @@ export default function Dashboard() {
     fetchMatches();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      setUser(null);
-      navigate("/login");
-    } catch (e) {
-      // ignore
-    }
-  };
-
   // Calculate matches found this week (past 7 days)
   const getMatchesThisWeek = () => {
     const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
@@ -53,20 +39,6 @@ export default function Dashboard() {
         <div className={styles.welcome}>
           <h1 className={styles.name}>Hello, {user?.full_name || "Seeker"}</h1>
           <p style={{ color: "var(--text-secondary)" }}>Manage your remoteness match radar</p>
-        </div>
-        <div className={styles.nav}>
-          <ThemeToggle />
-          {user?.is_admin && (
-            <Link to="/admin" className={styles.navLink}>
-              🔑 Admin Panel
-            </Link>
-          )}
-          <Link to="/settings" className={styles.navLink}>
-            ⚙️ Settings
-          </Link>
-          <button className={styles.btnLogout} onClick={handleLogout}>
-            Sign Out
-          </button>
         </div>
       </header>
 

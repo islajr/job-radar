@@ -1,0 +1,120 @@
+.header {
+  width: 100%;
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: var(--transition-smooth);
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.linksGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.navLink {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.navLink:hover {
+  color: var(--text-primary);
+}
+
+.activeLink {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color);
+}
+
+.btnSignout {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btnSignout:hover {
+  background: var(--border-color);
+  color: var(--error);
+}
+
+.btnRegister {
+  background: var(--primary);
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btnRegister:hover {
+  background: var(--primary-hover);
+}
+
+@media (max-width: 640px) {
+  .container {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .linksGroup {
+    gap: 0.75rem;
+  }
+  
+  .divider {
+    display: none;
+  }
+}

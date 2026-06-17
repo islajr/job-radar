@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { getAdminUsers, getScraperRuns, triggerScraper, type AdminUser, type ScraperRun } from "../api/admin";
-import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Admin.module.css";
 
 export default function Admin() {
-  const navigate = useNavigate();
+
 
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [runs, setRuns] = useState<ScraperRun[]>([]);
@@ -74,12 +72,6 @@ export default function Admin() {
         <div className={styles.titleRow}>
           <h1 className={styles.title}>Admin Panel</h1>
           <p style={{ color: "var(--text-secondary)" }}>Monitor scraper health and user status</p>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <ThemeToggle />
-          <button className={styles.btnBack} onClick={() => navigate("/dashboard")}>
-            Back to Dashboard
-          </button>
         </div>
       </header>
 

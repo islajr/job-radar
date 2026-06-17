@@ -1,34 +1,12 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { logoutUser } from "../api/auth";
-import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Landing.module.css";
 
 export default function Landing() {
-  const { user, setUser } = useAuth();
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      setUser(null);
-    } catch (e) {
-      // ignore
-    }
-  };
+  const { user } = useAuth();
 
   return (
     <div className={styles.container}>
-      <nav className={styles.navbar}>
-        <span className={styles.logo}>🔎 Job Radar</span>
-        <div className={styles.navRight}>
-          <ThemeToggle />
-          {user && (
-            <button onClick={handleLogout} className={styles.btnLogout}>
-              Sign Out
-            </button>
-          )}
-        </div>
-      </nav>
       <header className={styles.hero}>
         <div className={styles.badge}>Stage 1 Core Active</div>
         <h1 className={styles.title}>Your Personal Remote Job Radar</h1>

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import Header from "./components/Header";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -40,6 +41,7 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>
+            <Header />
             <Routes>
               <Route path="/"           element={<Landing />} />
               <Route path="/register"   element={<Register />} />
@@ -56,3 +58,4 @@ export default function App() {
     </QueryClientProvider>
   );
 }
+

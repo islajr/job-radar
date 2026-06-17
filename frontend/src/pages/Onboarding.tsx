@@ -1,29 +1,16 @@
 import { useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { logoutUser } from "../api/auth";
 import { updateProfile, updateNotifications } from "../api/profile";
 import KeywordInput from "../components/KeywordInput";
 import TelegramConnect from "../components/TelegramConnect";
-import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Onboarding.module.css";
 
 type Step = 1 | 2 | 3;
 
 export default function Onboarding() {
-  const { user, setUser, refreshUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      await logoutUser();
-      setUser(null);
-      navigate("/login");
-    } catch (e) {
-      // ignore
-    }
-  };
-
 
   const [step, setStep] = useState<Step>(1);
   const [roleTitle, setRoleTitle] = useState("");
@@ -84,12 +71,6 @@ export default function Onboarding() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.themeHeader}>
-        <button onClick={handleLogout} className={styles.btnSignout} type="button">
-          Sign Out
-        </button>
-        <ThemeToggle />
-      </div>
       <div className={`${styles.card} glass-card`}>
         <div className={styles.progress}>
           <div className={styles.progressLine}></div>

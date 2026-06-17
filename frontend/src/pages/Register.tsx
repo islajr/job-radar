@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { registerUser } from "../api/auth";
-import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Auth.module.css";
 
 export default function Register() {
@@ -37,9 +36,6 @@ export default function Register() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.themeHeader}>
-        <ThemeToggle />
-      </div>
       <div className={`${styles.card} glass-card`}>
         <div className={styles.header}>
           <h2 className={styles.title}>Join Job Radar</h2>

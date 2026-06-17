@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { getProfile, updateProfile, getNotifications, updateNotifications } from "../api/profile";
 import KeywordInput from "../components/KeywordInput";
 import TelegramConnect from "../components/TelegramConnect";
-import ThemeToggle from "../components/ThemeToggle";
 import styles from "./Settings.module.css";
 
 export default function Settings() {
-  const navigate = useNavigate();
+
 
   // Role and experience state
   const [roleTitle, setRoleTitle] = useState("");
@@ -61,9 +59,9 @@ export default function Settings() {
         role_title: roleTitle,
         experience_years: parseInt(experienceYears, 10),
       });
-      setRoleMsg({ text: "Role & experience saved successfully!", type: "success" });
+      setRoleMsg({ text: "Role settings saved successfully!", type: "success" });
     } catch (err: any) {
-      setRoleMsg({ text: err?.detail || "Failed to save role settings.", type: "error" });
+      setRoleMsg({ text: err?.detail || "Failed to save settings.", type: "error" });
     } finally {
       setRoleLoading(false);
     }
@@ -79,9 +77,9 @@ export default function Settings() {
         exclusion_keywords: exclusionKeywords,
         skills_summary: skillsSummary,
       });
-      setKwMsg({ text: "Keywords & filters saved successfully!", type: "success" });
+      setKwMsg({ text: "Filter keywords saved successfully!", type: "success" });
     } catch (err: any) {
-      setKwMsg({ text: err?.detail || "Failed to save filters.", type: "error" });
+      setKwMsg({ text: err?.detail || "Failed to save settings.", type: "error" });
     } finally {
       setKwLoading(false);
     }
@@ -117,12 +115,6 @@ export default function Settings() {
         <div className={styles.titleRow}>
           <h1 className={styles.title}>Settings</h1>
           <p style={{ color: "var(--text-secondary)" }}>Adjust your match filters and alerts</p>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <ThemeToggle />
-          <button className={styles.btnBack} onClick={() => navigate("/dashboard")}>
-            Back to Dashboard
-          </button>
         </div>
       </header>
 
