@@ -16,13 +16,14 @@ Relative to the Approved [Implementation Plan](file:///home/isla-jr/.gemini/anti
 ### 2. Backend FastAPI Application (Tier 2)
 - Implemented core auth, user profile, and notification settings routers.
 - **Bcrypt compatibility fix**: Replaced `passlib` context hashing with the modern direct `bcrypt` library, resolving runtime exceptions with Python 3.14 on newer systems.
-- Created `/api/telegram/connect` deep link generator, `/api/telegram/status` poll check, and `/api/telegram/webhook` message hook handler.
+- Created `/api/profile/test-email` endpoint to dispatch integration test notifications using the Resend API.
+- Completely removed all Telegram webhook and connection status endpoints.
 
 ### 3. Frontend React App (Tier 3)
-- Built Vite-TS dark-mode glassmorphic interface (Auth, Guided Onboarding, Keywords Tag Input, Telegram Connect module, and Settings panel).
+- Built Vite-TS dark-mode Apple system design interface (Auth, Guided Onboarding, Keywords Tag Input, and Settings panel).
 - Resolved all type-safety compiler and CSS selector errors.
-- Added a real-time Telegram Bot Connection status badge (`Connected` / `Not Connected`) directly on the **[Settings page](file:///home/isla-jr/Documents/se-workspace/job-radar/frontend/src/pages/Settings.tsx)**.
-- Verified that production build bundles compile cleanly into `frontend/dist/`.
+- **Global Header**: Created a global unified **[Header.tsx](file:///home/isla-jr/Documents/se-workspace/job-radar/frontend/src/components/Header.tsx)** navigation bar displaying active route highlights, dynamic session actions, the theme toggle, and Sign Out triggers.
+- **Email Verification**: Redesigned Onboarding Step 3 and Settings to show a clean Email Alerts card containing a "Send Test Email" test button.
 
 ### 4. Scraper Engine (Tier 4)
 - **[ycombinator.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/boards/ycombinator.py)**: Scrapes listings by parsing YC's embedded `data-page` JSON object, ensuring extreme stability against DOM shifts.
@@ -30,8 +31,8 @@ Relative to the Approved [Implementation Plan](file:///home/isla-jr/.gemini/anti
 - **[deduplicator.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/deduplicator.py)**: Deterministically filters duplicates using SHA-256 hashes of `board|company|title`.
 - **[matcher.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/matcher.py)**: Cross-references new listings with active users based on their keyword profiles.
 - **Robust UUIDs**: Modified database insertions to generate UUID keys in Python, preventing `NotNullViolation` errors since database primary keys do not have default server-side generators.
-- **Async notifier dispatcher**: Updated immediate Telegram notifier functions to run natively asynchronous inside the main event loop to avoid `RuntimeError` loops.
-- **[digest.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/digest.py)**: Aggregates daily summaries for digest-configured users and dispatches single compiled Telegram updates.
+- **Resend Notifier**: Implemented **[resend_notifier.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/notifier/resend_notifier.py)** to dispatch clean, responsive macOS/iOS-style HTML emails for immediate alerts.
+- **[digest.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/digest.py)**: Aggregates daily summaries for digest-configured users and dispatches single compiled HTML email summaries via Resend.
 
 ### 5. Workflows & Configuration (Tier 5)
 - Created **[scraper.yml](file:///home/isla-jr/Documents/se-workspace/job-radar/.github/workflows/scraper.yml)** (runs every 6 hours/manually) and **[digest.yml](file:///home/isla-jr/Documents/se-workspace/job-radar/.github/workflows/digest.yml)** (runs daily at 07:00 UTC).
@@ -41,20 +42,20 @@ Relative to the Approved [Implementation Plan](file:///home/isla-jr/.gemini/anti
 
 ## 🚀 Next Steps: Operational Checklist
 
-Follow these steps to deploy the application, configure Telegram bot routing, and set up automated scraper cron schedules.
+Follow these steps to deploy the application, configure Resend email notifications, and set up automated scraper cron schedules.
 
-### Step 1: Telegram Bot Setup
-1. Open Telegram and search for `@BotFather`.
-2. Send `/newbot` and follow the prompts to create your bot.
-3. Save the returned `TELEGRAM_BOT_TOKEN` (looks like `123456789:ABCdef...`).
-4. Update your local `.env` and Render dashboard (see Step 4) with this token.
+### Step 1: Resend Setup
+1. Register/log in to [Resend.com](https://resend.com).
+2. Go to **API Keys** and click **Create API Key**. Copy the key (starts with `re_`).
+3. If you have a custom domain, verify it under **Domains** to send emails from your own domain (e.g. `alerts@yourdomain.com`).
+4. Otherwise, for testing, you can use `onboarding@resend.dev` as your sender, which will dispatch emails to the single address registered to your Resend account.
 
 ### Step 2: GitHub Repository Setup
 1. Push this local repository to a **private** GitHub repository named `job-radar`.
 2. Go to **Settings → Secrets and variables → Actions → New repository secret**.
 3. Create the following secrets:
    - `DATABASE_URL` (your Supabase connection string)
-   - `TELEGRAM_BOT_TOKEN` (your token from `@BotFather`)
+   - `RESEND_API_KEY` (your token from Step 1)
 
 ### Step 3: GitHub Dispatch Token (Admin Run Button)
 1. Go to your GitHub account → **Settings → Developer Settings → Personal access tokens → Fine-grained tokens**.
@@ -73,22 +74,15 @@ Follow these steps to deploy the application, configure Telegram bot routing, an
 4. Add the following **Environment Variables** in the Render settings:
    - `DATABASE_URL` (Supabase connection string)
    - `SECRET_KEY` (Generate a new secure hash string)
-   - `TELEGRAM_BOT_TOKEN` (From Step 1)
+   - `RESEND_API_KEY` (From Step 1)
+   - `RESEND_FROM_EMAIL` (e.g., `onboarding@resend.dev` or custom domain email)
    - `GITHUB_DISPATCH_TOKEN` (From Step 3)
    - `GITHUB_REPO` (e.g., `yourusername/job-radar`)
 
-### Step 5: Telegram Bot Webhook Registration
-Once your Render service is live, register its API endpoint as your Telegram Bot webhook. Run this curl command (replace `<TOKEN>` and `<your-render-domain>`):
-
-```bash
-curl -X POST "https://api.telegram.org/bot<TOKEN>/setWebhook" \
-  -d "url=https://<your-render-domain>.onrender.com/api/telegram/webhook"
-```
-
-### Step 6: Verify the Operation Flow
+### Step 5: Verify the Operation Flow
 1. Visit your Render URL (the Landing page should load).
 2. Register a new user account.
-3. Complete the Guided Onboarding (Role, Keywords, and Telegram Bot link connection).
-4. Go to the dashboard.
+3. Complete the Guided Onboarding (Role, Keywords, and email alerts verification).
+4. Click **Send Test Email** on onboarding step 3 or settings to verify integration.
 5. In the Admin settings tab, click **Run Scraper Now** (or run the workflow manually on GitHub).
-6. Verify that listings populate the dashboard matching your keywords, and your Telegram client receives immediate messages.
+6. Verify that listings matching your keywords populate the dashboard, and you receive corresponding email alerts.
