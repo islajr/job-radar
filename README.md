@@ -1,6 +1,6 @@
 # 🔎 Job Radar
 
-Job Radar is a scheduled remote job aggregator, keyword filter, and instant notification service designed for personalized job search. It fetches listings from popular remote job boards, filters them against custom user keyword profiles, and delivers matching jobs **exclusively via Telegram** (either immediately or in a daily digest).
+Job Radar is a scheduled remote job aggregator, keyword filter, and instant notification service designed for personalized job search. It fetches listings from popular remote job boards, filters them against custom user keyword profiles, and delivers matching jobs **via Resend email alerts** (either immediately or in a daily digest).
 
 ---
 
@@ -8,13 +8,13 @@ Job Radar is a scheduled remote job aggregator, keyword filter, and instant noti
 
 Job Radar is split into three main components:
 
-1. **FastAPI Backend (`backend/`)**: Serves the REST API for user authentication, profile settings, matches dashboard, and Telegram bot webhook handlers.
+1. **FastAPI Backend (`backend/`)**: Serves the REST API for user authentication, profile settings, matches dashboard, and email alert integration.
 2. **React SPA (`frontend/`)**: A glassmorphic dark-mode web dashboard built with React, TypeScript, and Vite. It is compiled and served statically by the FastAPI server in production.
 3. **Scraper & Matcher Engine (`scraper/`)**: A standalone Python pipeline running:
    - **Fetchers**: Concurrently gathers listings from **RemoteOK**, **Himalayas**, and **Y Combinator Jobs**.
    - **Deduplicator**: Deterministically fingerprints listings using SHA-256 hashes to prevent processing duplicates.
    - **Matcher**: Evaluates new listings against active users' profile inclusion/exclusion keywords.
-   - **Notifier**: Dispatches immediate alerts or daily digests via the Telegram Bot API.
+   - **Notifier**: Dispatches immediate alerts or daily digests via the Resend Email API.
 
 ---
 

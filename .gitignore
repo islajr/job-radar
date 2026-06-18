@@ -6,3 +6,9 @@ frontend/node_modules/
 frontend/dist/
 cookies.txt
 .antigravitycli/
+
+# Internal specification and handoff documents
+PRD-job-radar.md
+TDD-job-radar.md
+handoff_guide.md
+CHECKLIST-job-radar.md
