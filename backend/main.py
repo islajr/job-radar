@@ -4,6 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from backend.database import init_db
 from backend.routers import auth, profile, dashboard, admin
+from backend.middleware.rate_limit import RateLimitMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -11,6 +12,7 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None)
+app.add_middleware(RateLimitMiddleware, requests_per_minute=15)
 
 app.include_router(auth.router,      prefix="/api/auth")
 app.include_router(profile.router,   prefix="/api")

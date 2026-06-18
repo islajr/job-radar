@@ -33,7 +33,7 @@ Job Radar is split into three main components:
 - **Python 3.12+**
 - **Node.js 20+**
 - **PostgreSQL** running locally or a Supabase instance.
-- A Telegram Bot token (create one by messaging `@BotFather` on Telegram).
+- A **Resend** account and API Key.
 
 ### 2. Clone and Install Dependencies
 
@@ -60,9 +60,11 @@ Create a `.env` file in the project root:
 ```env
 DATABASE_URL=postgresql://localhost/job_radar   # Or your Supabase connection string
 SECRET_KEY=your-session-serializer-secret-key    # Generate with: python -c "import secrets; print(secrets.token_hex(32))"
-TELEGRAM_BOT_TOKEN=123456789:ABCdef...
+RESEND_API_KEY=re_...                            # Your Resend API key
+RESEND_FROM_EMAIL=onboarding@resend.dev          # Sender email address
 GITHUB_DISPATCH_TOKEN=your-fine-grained-github-pat
 GITHUB_REPO=yourusername/job-radar
+SIGNUP_WHITELIST=user1@example.com,user2@example.com  # Optional: Comma-separated allowed email addresses for registration. If empty, registration is open to all.
 ```
 
 ### 4. Database Migrations
@@ -113,21 +115,34 @@ The scraper can be executed manually or as a scheduled process.
   ```bash
   python -m scraper.main
   ```
-  This fetches jobs, deduplicates them, matches keywords, and dispatches immediate Telegram alerts.
+  This fetches jobs, deduplicates them, matches keywords, and dispatches immediate Resend email alerts.
 
 * **Run Daily Digest Dispatcher**:
   ```bash
   python -m scraper.digest
   ```
-  This gathers all accumulated matches for users configured with a `digest` alert frequency and dispatches a single batched message.
+  This gathers all accumulated matches for users configured with a `digest` alert frequency and dispatches a single compiled HTML email.
 
 ---
 
-## 🧪 Running Tests
-Verify keyword matching logic by running the test suite:
+## 🔒 Security Features
+
+1. **Signup Whitelist (`SIGNUP_WHITELIST`)**:
+   - Limit user registration strictly to a comma-separated list of approved emails.
+   - If `SIGNUP_WHITELIST` is unset or empty, registration is open to anyone.
+
+2. **Aggressive Anonymous Rate Limiting**:
+   - All anonymous (non-signed-in) visitors are limited to **15 requests per minute** on API endpoints (`/api/*`).
+   - Limits are tracked in-memory using a sliding-window algorithm based on the client IP address (retrieved via `X-Forwarded-For` with a fallback to `request.client.host`).
+   - Signed-in sessions (requests with a valid `session` cookie) bypass this rate-limiting entirely.
+
+---
+
+Verify keyword matching logic and security features by running the test suite:
 
 ```bash
-python -m unittest tests/test_matcher.py
+# Run all tests via pytest
+PYTHONPATH=. .venv/bin/pytest
 ```
 
 ---

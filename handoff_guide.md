@@ -34,9 +34,14 @@ Relative to the Approved [Implementation Plan](file:///home/isla-jr/.gemini/anti
 - **Resend Notifier**: Implemented **[resend_notifier.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/notifier/resend_notifier.py)** to dispatch clean, responsive macOS/iOS-style HTML emails for immediate alerts.
 - **[digest.py](file:///home/isla-jr/Documents/se-workspace/job-radar/scraper/digest.py)**: Aggregates daily summaries for digest-configured users and dispatches single compiled HTML email summaries via Resend.
 
-### 5. Workflows & Configuration (Tier 5)
+### 5. Security & Rate Limiting
+- **Signup Whitelist (`SIGNUP_WHITELIST`)**: Implemented comma-separated email whitelist configuration checking on registration. Registration requests with emails not on the whitelist will fail with a `403 Forbidden` response.
+- **In-Memory Rate Limiting**: Added `RateLimitMiddleware` mapping `/api/*` requests. Restricts non-signed-in IP clients to **15 requests per minute** using a sliding window. Valid session cookies bypass this restriction.
+- **Integration Tests**: Added `tests/test_security.py` covering rate limiting, session bypasses, and email whitelisting.
+
+### 6. Workflows & Configuration (Tier 5)
 - Created **[scraper.yml](file:///home/isla-jr/Documents/se-workspace/job-radar/.github/workflows/scraper.yml)** (runs every 6 hours/manually) and **[digest.yml](file:///home/isla-jr/Documents/se-workspace/job-radar/.github/workflows/digest.yml)** (runs daily at 07:00 UTC).
-- Updated **[README.md](file:///home/isla-jr/Documents/se-workspace/job-radar/README.md)** with clear setup, tech stack, and scraper execution details.
+- Updated **[README.md](file:///home/isla-jr/Documents/se-workspace/job-radar/README.md)** with clear setup, tech stack, security policies, and scraper execution details.
 
 ---
 
@@ -78,6 +83,7 @@ Follow these steps to deploy the application, configure Resend email notificatio
    - `RESEND_FROM_EMAIL` (e.g., `onboarding@resend.dev` or custom domain email)
    - `GITHUB_DISPATCH_TOKEN` (From Step 3)
    - `GITHUB_REPO` (e.g., `yourusername/job-radar`)
+   - `SIGNUP_WHITELIST` (Optional: comma-separated list of whitelisted emails allowed to register, e.g. `admin@example.com`)
 
 ### Step 5: Verify the Operation Flow
 1. Visit your Render URL (the Landing page should load).

@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     github_repo: str                          # e.g. "username/job-radar"
     environment: str = "production"
     session_max_age_seconds: int = 604800     # 7 days
+    signup_whitelist: str = ""
 
     class Config:
         env_file = ".env"

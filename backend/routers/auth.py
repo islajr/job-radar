@@ -13,6 +13,11 @@ router = APIRouter()
 
 @router.post("/register", response_model=SessionResponse)
 async def register(body: RegisterRequest, response: Response, db: AsyncSession = Depends(get_db)):
+    if settings.signup_whitelist:
+        allowed_emails = {e.strip().lower() for e in settings.signup_whitelist.split(",") if e.strip()}
+        if allowed_emails and body.email.strip().lower() not in allowed_emails:
+            raise HTTPException(403, "Registration is restricted to whitelisted email addresses.")
+
     if len(body.password) < 8:
         raise HTTPException(400, "Password must be at least 8 characters")
 
