@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 class AdminUserView(BaseModel):
     id: str
@@ -13,7 +14,7 @@ class AdminUserView(BaseModel):
     telegram_connected: bool
 
 class ScraperRunView(BaseModel):
-    id: str
+    id: UUID
     board: str
     started_at: datetime
     completed_at: Optional[datetime] = None
