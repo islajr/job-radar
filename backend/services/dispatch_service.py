@@ -11,6 +11,6 @@ async def trigger_scraper_workflow() -> bool:
                 "Accept": "application/vnd.github+json",
                 "X-GitHub-Api-Version": "2022-11-28"
             },
-            json={"ref": "main"},
+            json={"ref": settings.github_branch},
         )
     return response.status_code == 204  # GitHub returns 204 on success

@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     resend_from_email: str = "onboarding@resend.dev"
     github_dispatch_token: str                # Fine-grained PAT with workflow scope
     github_repo: str                          # e.g. "username/job-radar"
+    github_branch: str = "main"
     environment: str = "production"
     session_max_age_seconds: int = 604800     # 7 days
     signup_whitelist: str = ""
