@@ -13,8 +13,9 @@ async def send_email_message(to_email: str, subject: str, html_content: str) -> 
         "Authorization": f"Bearer {settings.resend_api_key}",
         "Content-Type": "application/json"
     }
+    from_email = settings.resend_from_email.strip() if (settings.resend_from_email and settings.resend_from_email.strip()) else "onboarding@resend.dev"
     payload = {
-        "from": f"Job Radar <{settings.resend_from_email}>",
+        "from": f"Job Radar <{from_email}>",
         "to": [to_email],
         "subject": subject,
         "html": html_content
